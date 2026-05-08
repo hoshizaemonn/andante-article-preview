@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Day2投稿プレビュー｜5/8 鈴木さん確認用</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", sans-serif;
+    background: #f5f5f5;
+    color: #0f1419;
+    line-height: 1.7;
+  }
+  .wrap { max-width: 600px; margin: 0 auto; }
+  .header {
+    padding: 16px 20px;
+    background: #fff;
+    border-bottom: 1px solid #eff3f4;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .header h1 { font-size: 14px; color: #536471; font-weight: 700; }
+  .header .live {
+    background: #1d9bf0;
+    color: #fff;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    margin-right: 8px;
+  }
+  .day-title {
+    background: #fff;
+    padding: 24px 20px;
+    border-bottom: 1px solid #eff3f4;
+  }
+  .day-title h2 { font-size: 20px; font-weight: 800; }
+  .day-title p { font-size: 13px; color: #536471; margin-top: 4px; }
+  .post-section {
+    background: #fff;
+    margin-bottom: 12px;
+    border: 1px solid #eff3f4;
+  }
+  .post-section-header {
+    background: linear-gradient(135deg, #1d9bf0, #0a4d80);
+    color: #fff;
+    padding: 12px 20px;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .post {
+    padding: 16px 20px;
+    border-bottom: 1px solid #eff3f4;
+    position: relative;
+  }
+  .post.thread::before {
+    content: "";
+    position: absolute;
+    left: 39px;
+    top: 60px;
+    width: 2px;
+    height: calc(100% - 60px);
+    background: #cfd9de;
+  }
+  .post-header {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+  .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1d9bf0, #0a4d80);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: 14px;
+  }
+  .post-meta { flex: 1; line-height: 1.3; }
+  .post-name { font-weight: 700; color: #0f1419; font-size: 15px; }
+  .post-handle { color: #536471; font-size: 14px; }
+  .post-body {
+    font-size: 16px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    margin-left: 60px;
+    margin-bottom: 12px;
+  }
+  .post-body strong { font-weight: 800; }
+  .post-img {
+    width: calc(100% - 60px);
+    margin-left: 60px;
+    margin-top: 12px;
+    border-radius: 16px;
+    border: 1px solid #cfd9de;
+  }
+  .post-img-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px;
+    margin-left: 60px;
+    margin-top: 12px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #cfd9de;
+  }
+  .post-img-grid img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+  }
+  .post-actions {
+    display: flex;
+    gap: 60px;
+    margin-left: 60px;
+    margin-top: 14px;
+    color: #536471;
+    font-size: 13px;
+  }
+  .reply-marker {
+    background: #1d9bf0;
+    color: #fff;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  .review-banner {
+    background: #fef0f0;
+    border: 2px solid #ff6b6b;
+    color: #8b0000;
+    padding: 16px 20px;
+    margin: 16px;
+    border-radius: 12px;
+    font-size: 13px;
+  }
+  .review-banner strong { color: #b00; }
+  .strategy-banner {
+    background: #e8f5fe;
+    border: 1px solid #1d9bf0;
+    color: #0a4d80;
+    padding: 12px 16px;
+    margin: 12px 0 0 60px;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .strategy-banner strong { color: #1d9bf0; }
+  .self-reply-marker {
+    margin-left: 60px;
+    font-size: 11px;
+    color: #536471;
+    margin-bottom: 8px;
+  }
+  .post.self-reply { background: #f7f9fa; }
+  .footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: #536471;
+    font-size: 12px;
+  }
+  .day-summary {
+    background: #fff;
+    padding: 24px 20px;
+    margin: 16px;
+    border-radius: 12px;
+    border: 1px solid #cfd9de;
+  }
+  .day-summary h3 { font-size: 16px; margin-bottom: 12px; }
+  .day-summary table { width: 100%; font-size: 13px; }
+  .day-summary td { padding: 6px 8px; border-bottom: 1px solid #eff3f4; }
+  .affiliate-link { color: #1d9bf0; text-decoration: none; }
+  .schedule-banner {
+    background: #fff8e6;
+    padding: 16px 20px;
+    margin: 16px;
+    border-radius: 12px;
+    border: 2px solid #ffd633;
+    font-size: 13px;
+    color: #5b5b00;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header">
+    <h1><span class="live">📋 Day2 PREVIEW</span>5/8 投稿3本｜鈴木さん確認用</h1>
+  </div>
+
+  <div class="review-banner">
+    <strong>📝 鈴木さん確認お願いします</strong><br>
+    昨日（5/7）のデータを反映して、今日は3投稿予定です。<br>
+    画像も全部入れてプレビュー公開しました。投稿1（昼）→投稿3（夕）→投稿2（夜）の順で展開。
+  </div>
+
+  <div class="schedule-banner">
+    <strong>📅 投稿スケジュール（5/8）</strong><br>
+    🍱 12:30 投稿① LBH18 ローテーション続編<br>
+    🌆 17:30 投稿③ 軸足ドリブル「蹴り足は間違い」<br>
+    🌙 21:00 投稿② ネイマール脳 + 4枚カード
+  </div>
+
+  <!-- ============ 投稿1 ============ -->
+  <div class="post-section">
+    <div class="post-section-header">🍱 投稿① 12:30 — LBH18 ローテーション続編</div>
+
+    <div class="post thread">
+      <div class="post-header">
+        <div class="avatar">ANDANTE</div>
+        <div class="post-meta">
+          <div class="post-name">ほくと【ANDANTE】 ✓</div>
+          <div class="post-handle">@hokuto_suzuki_ · 5/8 12:30</div>
+        </div>
+      </div>
+      <div class="post-body">前回『次の投稿で』と言ってた、もう1つのゴムボール。
+
+『モルテン リフティングボール LBH18』
+Amazonで¥3,374。LBN15より少し大きくて、扱いやすい。
+
+実は、初心者ほどこっちのLBH18から始めた方がいい。
+
+僕の使い分けはこう:
+① LBH18（大きめ）でまず1ヶ月、足元を作る
+② LBN15（小さめ）で脳に新しい刺激を入れる
+③ また LBH18 に戻ると、別の感覚で発見がある
+
+このローテーションで、上達が止まらない。
+
+商品はこちら↓
+<a href="https://amzn.to/48PCsHs" class="affiliate-link">https://amzn.to/48PCsHs</a></div>
+      <img class="post-img" src="post1_gomu_ball.jpg" alt="モルテン LBH18">
+      <div class="post-actions">
+        <span>💬 0</span><span>🔁 0</span><span>♡ 0</span><span>📊 0</span>
+      </div>
+    </div>
+
+    <div class="post self-reply">
+      <div class="self-reply-marker">🕐 投稿後30分以内に自己リプ（13:00）</div>
+      <div class="post-header">
+        <div class="avatar">ANDANTE</div>
+        <div class="post-meta">
+          <div class="post-name">ほくと【ANDANTE】<span style="color:#536471;font-weight:400;">が返信</span></div>
+          <div class="post-handle">@hokuto_suzuki_</div>
+        </div>
+      </div>
+      <div class="post-body">ちなみに、もう1つ組み合わせると相乗効果が爆発するボールがあります。
+
+『モルテン pelada Training（3号球・430g）』。
+
+子ども用の小ささ + 大人ボールの重さ。
+これを混ぜると、脳が完全に新しい刺激を受け続けます。
+
+『LBH18 → LBN15 → 3号球』の3段ローテーション。
+これが ANDANTE 流の上達加速ルート。
+
+詳しくは次の投稿で。</div>
+      <img class="post-img" src="post-d2_3goukyu.jpg" alt="モルテン Pelada Training 3号球">
+      <div class="post-actions">
+        <span>💬 0</span><span>🔁 0</span><span>♡ 0</span><span>📊 0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 投稿3 ============ -->
+  <div class="post-section">
+    <div class="post-section-header">🌆 投稿③ 17:30 — 軸足ドリブル「蹴り足は間違い」</div>
+
+    <div class="post thread">
+      <div class="post-header">
+        <div class="avatar">ANDANTE</div>
+        <div class="post-meta">
+          <div class="post-name">ほくと【ANDANTE】 ✓</div>
+          <div class="post-handle">@hokuto_suzuki_ · 5/8 17:30</div>
+        </div>
+      </div>
+      <div class="post-body">ドリブルが取られる人の95%が、『蹴り足』を意識してます。
+
+これ、間違いです。
+正解は『軸足で体を押し出す』。
+
+久保建英・メッシのドリブルを動作分析すると、
+彼らは蹴り足を「動かす」んじゃなくて、
+軸足で「地面を押し」、体を前に進めてる。
+
+これがバイオメカニクスの『地面反力』。
+
+具体的なやり方は『足の指で地面を掴む感覚で軸足に立つ』。
+
+3週間続けたら、ボールが体から離れなくなります。
+
+詳しい解説は固定ポストにまとめてます。</div>
+      <img class="post-img" src="post-d2_axis_vs_kick.png" alt="軸足 vs 蹴り足 比較">
+      <div class="post-actions">
+        <span>💬 0</span><span>🔁 0</span><span>♡ 0</span><span>📊 0</span>
+      </div>
+    </div>
+
+    <div class="post self-reply">
+      <div class="self-reply-marker">🕐 投稿後30分以内に自己リプ（18:00）</div>
+      <div class="post-header">
+        <div class="avatar">ANDANTE</div>
+        <div class="post-meta">
+          <div class="post-name">ほくと【ANDANTE】<span style="color:#536471;font-weight:400;">が返信</span></div>
+          <div class="post-handle">@hokuto_suzuki_</div>
+        </div>
+      </div>
+      <div class="post-body">軸足の科学を徹底解説したYouTube、9.4万回再生されてます。
+バイオメカニクス・地面反力・伸張短縮サイクルまで全部解説。
+
+<a href="https://youtu.be/XpU8ATreJ3o" class="affiliate-link">https://youtu.be/XpU8ATreJ3o</a></div>
+      <div class="post-actions">
+        <span>💬 0</span><span>🔁 0</span><span>♡ 0</span><span>📊 0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 投稿2 ============ -->
+  <div class="post-section">
+    <div class="post-section-header">🌙 投稿② 21:00 — ネイマール脳 + 4枚カード</div>
+
+    <div class="post">
+      <div class="post-header">
+        <div class="avatar">ANDANTE</div>
+        <div class="post-meta">
+          <div class="post-name">ほくと【ANDANTE】 ✓</div>
+          <div class="post-handle">@hokuto_suzuki_ · 5/8 21:00</div>
+        </div>
+      </div>
+      <div class="post-body">ぶっちゃけ、サッカー上達しない人の95%が同じミスしてます。
+
+『同じボールでしか練習しない』こと。
+
+これ、ネイマールの脳をMRIで研究した結果から分かった真実です。
+
+普通の人より、脳の活動が10%しかない。
+つまり、必要な筋肉だけをピンポイントで動かせる。
+
+じゃあどうすればその脳に近づくか？
+ネイマール本人が答えてます。
+『50個以上の異なった重さ・形のボール』で練習した。
+
+僕も色々なボールでローテーションしたら、
+3ヶ月で逆足が使えるようになりました。
+20年サッカーやってもできなかったことが、3ヶ月で。
+
+毎日同じ練習じゃない。
+脳に新しい刺激を入れ続ける練習が、上達の正解です。
+
+具体的なボール選びとローテーション、固定ポストにまとめてあります。</div>
+
+      <div class="post-img-grid">
+        <img src="post-d2_neymar_1.png" alt="#1 ネイマールの脳">
+        <img src="post-d2_neymar_2.png" alt="#2 練習法">
+        <img src="post-d2_neymar_3.png" alt="#3 ANDANTEローテーション">
+        <img src="post-d2_neymar_4.png" alt="#4 結果">
+      </div>
+
+      <div class="post-actions">
+        <span>💬 0</span><span>🔁 0</span><span>♡ 0</span><span>📊 0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 戦略まとめ ============ -->
+  <div class="day-summary">
+    <h3>📊 昨日（5/7）の学び反映</h3>
+    <table>
+      <tr><td>✅</td><td>強いhook（5/7メイン33%エンゲ率）→ 全投稿で踏襲</td></tr>
+      <tr><td>✅</td><td>視覚図解（5/7軸足25%）→ 全投稿に画像必須</td></tr>
+      <tr><td>✅</td><td>具体性（数字・商品名）→ 価格・期間・名前を全部入れる</td></tr>
+      <tr><td>⚠️</td><td>スレッドの最後は届かない（5/7❸ルーティン0%）→ 単発+自己リプの2層構造</td></tr>
+      <tr><td>⚠️</td><td>自己リプは見られにくい（5/7自己リプ5%）→ メインに核心、リプは補足</td></tr>
+    </table>
+  </div>
+
+  <div class="day-summary">
+    <h3>🎯 各投稿の狙い</h3>
+    <table>
+      <tr><td><strong>投稿①</strong></td><td>シリーズ続編 + Amazon送客（LBH18 + 3号球予告）</td></tr>
+      <tr><td><strong>投稿③</strong></td><td>強い意見「蹴り足は間違い」+ YouTube送客</td></tr>
+      <tr><td><strong>投稿②</strong></td><td>ネイマール研究で権威性 + 4枚カード保存稼ぐ</td></tr>
+    </table>
+  </div>
+
+  <div class="footer">
+    <p>📌 ANDANTE Day2｜5/8 投稿予定</p>
+    <p>確認OKなら 12:30 → 17:30 → 21:00 で投稿実行</p>
+  </div>
+
+</div>
+</body>
+</html>
